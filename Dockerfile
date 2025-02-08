@@ -23,7 +23,7 @@ COPY project-contributors-api/poetry.lock project-contributors-api/pyproject.tom
 
 RUN pip install poetry==${POETRY_VERSION}
 
-RUN if [ $DEV ]; then poetry install --with dev --no-root --no-cache; else poetry install --without dev --no-root --no-cache; fi
+RUN if [ $DEV ]; then poetry install --with dev,test --no-root --no-cache; else poetry install --without dev,test --no-root --no-cache; fi
 RUN rm -f poetry.lock pyproject.toml
 
 COPY scripts/entrypoints/dev-entrypoint.sh .

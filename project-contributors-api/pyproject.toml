@@ -20,12 +20,17 @@ optional = true
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3.4"
+pytest-django = "^4.9.0"
 
 [tool.poetry.group.dev]
 optional = true
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "project_contributors_api.settings"
+python_files = ["test_*.py", "*_test.py", "testing/python/*.py"]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
