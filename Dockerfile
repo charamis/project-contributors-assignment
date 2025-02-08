@@ -13,7 +13,9 @@ ENV VIRTUAL_ENV=/app/.venv \
     POETRY_VIRTUALENVS_IN_PROJECT=1 \
     POETRY_VIRTUALENVS_CREATE=1
 
-FROM base as dev
+FROM base AS dev
+
+ENV APP_DIR=/app/project-contributors-api/
 
 WORKDIR /app
 
@@ -25,10 +27,11 @@ RUN if [ $DEV ]; then poetry install --with dev --no-root --no-cache; else poetr
 RUN rm -f poetry.lock pyproject.toml
 
 COPY scripts/entrypoints/dev-entrypoint.sh .
+COPY scripts/*.sh .
 
 ENTRYPOINT ["./dev-entrypoint.sh"]
 
-FROM base as prod
+FROM base AS prod
 
 RUN useradd -m -r appuser && \
     mkdir /app && \
@@ -40,6 +43,7 @@ COPY --from=dev ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 COPY --chown=appuser:appuser project-contributors-api .
 COPY --chown=appuser:appuser scripts/entrypoints/prod-entrypoint.sh .
+COPY --chown=appuser:appuser scripts/apply_migrations.sh .
 
 USER appuser
 
