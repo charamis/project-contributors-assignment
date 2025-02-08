@@ -12,10 +12,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
+from enum import Enum
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -25,6 +25,8 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get("DEBUG", default=0))
+
+DJANGO_ENV = os.environ.get("DJANGO_ENV", default="development")
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(",")
 
@@ -78,15 +80,32 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "project_contributors_api.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
+class DatabaseEnv(Enum):
+    PRODUCTION = "production"
+    DEVELOPMENT = "development"
+
+DATABASE_ADAPTERS = {
+    DatabaseEnv.PRODUCTION: {
+        'ENGINE': os.environ.get("DATABASE_ENGINE"),
+        'NAME': os.environ.get("DATABASE_NAME"),
+        'USER': os.environ.get("DATABASE_USERNAME"),
+        'PASSWORD': os.environ.get("DATABASE_PASSWORD"),
+        'HOST': os.environ.get("DATABASE_HOST"),
+        'PORT': os.environ.get("DATABASE_PORT")
+    },
+    DatabaseEnv.DEVELOPMENT: {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db" / "db.sqlite3",
+        "NAME": BASE_DIR / "db" / "db.sqlite3"
     }
+}
+
+DATABASE_CONFIG = DATABASE_ADAPTERS[DatabaseEnv(DJANGO_ENV)]
+
+DATABASES = {
+    "default": DATABASE_CONFIG
 }
 
 
