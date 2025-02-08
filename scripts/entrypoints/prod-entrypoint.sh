@@ -6,4 +6,4 @@ set -e  # Exit immediately if any command fails
 
 ./apply_migrations.sh
 
-exec gunicorn --bind 0.0.0.0:8000 --workers 3 project_contributors_api.wsgi:application
+exec gunicorn --bind 0.0.0.0:8000 --workers 4 project_contributors_api.wsgi:application
