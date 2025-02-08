@@ -1,25 +1,40 @@
 services:
- api:
-   build:
-    context: .
-    target: prod
-    args:
-      DEV: false
-   container_name: project-contributors-api-prod
-   ports:
-     - "8000:8000"
-   environment:
-     DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
-     DEBUG: ${DEBUG}
-     DJANGO_LOGLEVEL: ${DJANGO_LOGLEVEL}
-     DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
 
-     DATABASE_ENGINE: ${DATABASE_ENGINE}
-     DATABASE_NAME: ${DATABASE_NAME}
-     DATABASE_USERNAME: ${DATABASE_USERNAME}
- 
-     DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-     DATABASE_HOST: ${DATABASE_HOST}
-     DATABASE_PORT: ${DATABASE_PORT}
-   env_file:
-     - .env
+  db:
+    image: postgres:17
+    container_name: project-contributors-db-prod
+    restart: always
+    environment:
+      POSTGRES_DB: prod_postgres
+      POSTGRES_USER: prod_db_user
+      POSTGRES_PASSWORD: prod_db_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d prod_postgres -U prod_db_user"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      target: prod
+      args:
+        DEV: false
+    container_name: project-contributors-api-prod
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+        - "8000:8000"
+    volumes:
+      - ./project-contributors-api:/app/project-contributors-api
+    env_file:
+      - .env.prod
+
+volumes:
+  db_data:
