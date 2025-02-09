@@ -47,7 +47,14 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework.authtoken",
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
     "dj_rest_auth",
+    "django.contrib.sites",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "dj_rest_auth.registration",
     "django_filters",
     "corsheaders",
     "django_countries",
@@ -55,8 +62,11 @@ INSTALLED_APPS = [
     "project",
 ]
 
+SITE_ID = 1  # For django-allauth
+
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -160,7 +170,10 @@ AUTH_USER_MODEL = "contributor.Contributor"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
     ],
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
@@ -168,13 +181,22 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
+    "USER_ID_FIELD": "uuid",
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,  # Make sure refresh tokens are blacklisted on logout
 }
 
 REST_AUTH = {
     "USE_JWT": True,
-    "JWT_AUTH_COOKIE": "_auth",
-    "JWT_AUTH_REFRESH_COOKIE": "_refresh",
     "JWT_AUTH_HTTPONLY": False,
+    "REGISTER_SERIALIZER": "contributor.serializers.ContributorRegisterSerializer",
+    "USER_DETAILS_SERIALIZER": "contributor.serializers.ContributorDetailsSerializer",
 }
+
+# django-allauth settings
+ACCOUNT_EMAIL_REQUIRED = (
+    True  # Ensure that email is required, even though it's not verified
+)
+ACCOUNT_EMAIL_VERIFICATION = "none"  # Disable email verification during registration

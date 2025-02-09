@@ -10,9 +10,11 @@ from common.models.base import BaseModel
 
 
 class Contributor(BaseModel, AbstractUser):
-    # 'username', 'first_name' and 'last_name' are inherited from AbstractUser
+    # 'username' is inherited from AbstractUser
 
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, blank=False, null=False)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
     birth_year = models.PositiveIntegerField(
         validators=[
             MinValueValidator(1900),  # Minimum allowed year
@@ -22,7 +24,14 @@ class Contributor(BaseModel, AbstractUser):
     address = models.CharField(max_length=100, blank=True, null=True)
     country_code = CountryField()
 
-    REQUIRED_FIELDS = ["email", "birth_year", "address", "country_code"]
+    REQUIRED_FIELDS = [
+        "email",
+        "first_name",
+        "last_name",
+        "birth_year",
+        "address",
+        "country_code",
+    ]
 
     def __str__(self):
         return f"{self.username} {self.email}"
