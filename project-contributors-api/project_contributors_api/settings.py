@@ -39,7 +39,7 @@ CORS_ALLOW_CREDENTIALS = True
 # Application definition
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
+    # "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -50,7 +50,9 @@ INSTALLED_APPS = [
     "dj_rest_auth",
     "django_filters",
     "corsheaders",
-    'django_countries',
+    "django_countries",
+    "contributor",
+    "project",
 ]
 
 MIDDLEWARE = [
@@ -153,6 +155,8 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "contributor.Contributor"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [

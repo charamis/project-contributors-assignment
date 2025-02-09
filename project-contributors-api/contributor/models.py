@@ -20,42 +20,35 @@ class Contributor(BaseModel, AbstractUser):
         ]
     )
     address = models.CharField(max_length=100, blank=True, null=True)
-    country = CountryField()
+    country_code = CountryField()
+
+    REQUIRED_FIELDS = ["email", "birth_year", "address", "country_code"]
 
     def __str__(self):
         return f"{self.username} {self.email}"
 
+
 class ContributorSkillset(BaseModel):
     LANGUAGE_CHOICES = [
-        ('PY', 'Python'),
-        ('JS', 'JavaScript'),
-        ('JAVA', 'Java'),
-        ('CPP', 'C++'),
-        ('GO', 'Go'),
-        ('RS', 'Rust'),
-        ('LUA', 'LUA'),
-        ('JL', 'Julia'),
+        ("PY", "Python"),
+        ("JS", "JavaScript"),
+        ("JAVA", "Java"),
+        ("CPP", "C++"),
+        ("GO", "Go"),
+        ("RS", "Rust"),
+        ("LUA", "LUA"),
+        ("JL", "Julia"),
     ]
 
     EXPERIENCE_CHOICES = [
-        ('BEG', 'Beginner'),
-        ('EXD', 'Experienced'),
-        ('EXP', 'Expert'),
+        ("BEG", "Beginner"),
+        ("EXD", "Experienced"),
+        ("EXP", "Expert"),
     ]
 
     contributor = models.ForeignKey(Contributor, on_delete=models.CASCADE)
-
-    programming_language = models.CharField(
-        max_length=8,
-        choices=LANGUAGE_CHOICES
-    )
-
-    experience_level = models.CharField(
-        max_length=3,
-        choices=EXPERIENCE_CHOICES
-    )
+    programming_language = models.CharField(max_length=8, choices=LANGUAGE_CHOICES)
+    experience_level = models.CharField(max_length=3, choices=EXPERIENCE_CHOICES)
 
     class Meta:
-        unique_together = ['contributor', 'programming_language']
-
-
+        unique_together = ["contributor", "programming_language"]
