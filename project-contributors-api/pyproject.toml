@@ -17,6 +17,8 @@ dependencies = [
     "djangorestframework-simplejwt (>=5.4.0,<6.0.0)",
     "dj-rest-auth (>=7.0.1,<8.0.0)",
     "django-countries (>=7.6.1,<8.0.0)",
+    "django-allauth (>=65.4.1,<66.0.0)",
+    "requests (>=2.32.3,<3.0.0)",
 ]
 
 [tool.poetry]
