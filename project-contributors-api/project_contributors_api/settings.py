@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "dj_rest_auth",
     "django_filters",
     "corsheaders",
+    'django_countries',
 ]
 
 MIDDLEWARE = [
