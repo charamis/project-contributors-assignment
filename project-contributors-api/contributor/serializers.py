@@ -3,13 +3,14 @@ from rest_framework import serializers
 
 from django.core.validators import MinValueValidator, MaxValueValidator
 from rest_framework.validators import UniqueValidator
+from rest_framework.exceptions import ValidationError
 from datetime import datetime
 
 from allauth.account.adapter import get_adapter
 
 from django.contrib.auth import get_user_model
 
-from .models import Contributor
+from .models import Contributor, ContributorSkillset
 
 
 class ContributorRegisterSerializer(RegisterSerializer):
@@ -66,7 +67,6 @@ class ContributorDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = [
-            "uuid",
             "username",
             "email",
             "first_name",
@@ -75,3 +75,56 @@ class ContributorDetailsSerializer(serializers.ModelSerializer):
             "country_code",
             "address",
         ]
+
+
+class ContributorSkillsetSerializer(serializers.ModelSerializer):
+    programming_language = serializers.CharField()
+    experience_level = serializers.CharField()
+
+    class Meta:
+        model = ContributorSkillset
+        fields = [
+            "programming_language",
+            "experience_level",
+        ]
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+
+        if "programming_language" in representation:
+            representation["programming_language"] = (
+                instance.get_programming_language_display()
+            )
+        if "experience_level" in representation:
+            representation["experience_level"] = instance.get_experience_level_display()
+
+        return representation
+
+    def to_internal_value(self, data):
+        data = data.copy()
+
+        if "programming_language" in data:
+            choices = dict(ContributorSkillset.LANGUAGE_CHOICES)
+            choices = {v: k for k, v in choices.items()}  # Reverse dict
+            data["programming_language"] = choices.get(data["programming_language"])
+
+        if "experience_level" in data:
+            choices = dict(ContributorSkillset.EXPERIENCE_CHOICES)
+            choices = {v: k for k, v in choices.items()}  # Reverse dict
+            data["experience_level"] = choices.get(data["experience_level"])
+
+        return super().to_internal_value(data)
+
+    def validate_programming_language(self, value):
+        contributor = self.context.get("contributor")
+        programming_language_choice = ContributorSkillset.get_programming_language_key(
+            value
+        )
+
+        if ContributorSkillset.objects.filter(
+            contributor=contributor, programming_language=programming_language_choice
+        ).exists():
+            raise ValidationError(
+                f"Contributor is already skilled in {value}."
+            )
+        return value

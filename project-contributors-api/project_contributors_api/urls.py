@@ -31,4 +31,5 @@ auth_patterns = [
 
 urlpatterns = [
     path("api/v1/auth/", include(auth_patterns)),
+    path("api/v1/contributor/", include("contributor.urls")),
 ]
