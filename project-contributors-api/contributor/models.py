@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from rest_framework.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from datetime import datetime
 
@@ -40,12 +41,12 @@ class Contributor(BaseModel, AbstractUser):
 class ContributorSkillset(BaseModel):
     LANGUAGE_CHOICES = [
         ("PY", "Python"),
-        ("JS", "JavaScript"),
+        ("JS", "Javascript"),
         ("JAVA", "Java"),
         ("CPP", "C++"),
         ("GO", "Go"),
         ("RS", "Rust"),
-        ("LUA", "LUA"),
+        ("LUA", "Lua"),
         ("JL", "Julia"),
     ]
 
@@ -55,9 +56,45 @@ class ContributorSkillset(BaseModel):
         ("EXP", "Expert"),
     ]
 
-    contributor = models.ForeignKey(Contributor, on_delete=models.CASCADE)
-    programming_language = models.CharField(max_length=8, choices=LANGUAGE_CHOICES)
-    experience_level = models.CharField(max_length=3, choices=EXPERIENCE_CHOICES)
+    contributor = models.ForeignKey(
+        Contributor, on_delete=models.CASCADE, related_name="skillset"
+    )
+    programming_language = models.CharField(
+        max_length=8, choices=LANGUAGE_CHOICES, blank=False, null=False
+    )
+    experience_level = models.CharField(
+        max_length=3, choices=EXPERIENCE_CHOICES, blank=False, null=False
+    )
 
     class Meta:
         unique_together = ["contributor", "programming_language"]
+
+    def clean(self):
+        """
+        Normally DRF should invoke is method during .is_valid() and get Django's ValidationError exception.
+        Since this does not happen, DRF's ValidationError is 'thrown' from here directly.
+        """
+        # Check if the Contributor has already skillset in speicifc programming language
+        if ContributorSkillset.objects.filter(
+            contributor=self.contributor, programming_language=self.programming_language
+        ).exists():
+            raise ValidationError(
+                f"Contributor is already skilled in {self.programming_language}."
+            )
+
+        # Check if the Contributor already has 3 skillsets
+        if (
+            ContributorSkillset.objects.filter(contributor=self.contributor).count()
+            >= 3
+        ):
+            raise ValidationError("A Contributor can have at most 3 skills.")
+
+    def save(self, *args, **kwargs):
+        self.clean()  # Call the custom clean method before saving
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def get_programming_language_key(cls, display_value):
+        choices = dict(cls.LANGUAGE_CHOICES)
+        choices = {v: k for k, v in choices.items()}  # Reverse dict
+        return choices.get(display_value, None)
