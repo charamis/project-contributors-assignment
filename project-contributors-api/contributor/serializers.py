@@ -124,7 +124,5 @@ class ContributorSkillsetSerializer(serializers.ModelSerializer):
         if ContributorSkillset.objects.filter(
             contributor=contributor, programming_language=programming_language_choice
         ).exists():
-            raise ValidationError(
-                f"Contributor is already skilled in {value}."
-            )
+            raise ValidationError(f"Contributor is already skilled in {value}.")
         return value
