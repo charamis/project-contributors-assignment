@@ -79,7 +79,9 @@ class ContributorSkillset(BaseModel):
             contributor=self.contributor, programming_language=self.programming_language
         ).exists():
             raise ValidationError(
-                f"Contributor is already skilled in {self.programming_language}."
+                {
+                    "error": f"Contributor is already skilled in {self.get_programming_language_display()}."
+                }
             )
 
         # Check if the Contributor already has 3 skillsets
@@ -87,7 +89,7 @@ class ContributorSkillset(BaseModel):
             ContributorSkillset.objects.filter(contributor=self.contributor).count()
             >= 3
         ):
-            raise ValidationError("A Contributor can have at most 3 skills.")
+            raise ValidationError({"error": "A Contributor can have at most 3 skills."})
 
     def save(self, *args, **kwargs):
         self.clean()  # Call the custom clean method before saving
