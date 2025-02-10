@@ -1,0 +1,368 @@
+{
+	"info": {
+		"_postman_id": "a0f21ab0-a0f0-4a9a-9dc1-8e13158e8b79",
+		"name": "Project Contributors API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41969602"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "johndoe",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "anotherpass",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/auth/login/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"login",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registration",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "johndoe",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "random@email.org",
+							"type": "text"
+						},
+						{
+							"key": "password1",
+							"value": "anotherpass",
+							"type": "text"
+						},
+						{
+							"key": "password2",
+							"value": "anotherpass",
+							"type": "text"
+						},
+						{
+							"key": "first_name",
+							"value": "John",
+							"type": "text"
+						},
+						{
+							"key": "last_name",
+							"value": "Doe",
+							"type": "text"
+						},
+						{
+							"key": "birth_year",
+							"value": "1980",
+							"type": "text"
+						},
+						{
+							"key": "country_code",
+							"value": "GB",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "RandomAddressInGB",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/auth/registration/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"registration",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Token Refresh",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "refresh",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczOTIyNzM3MiwiaWF0IjoxNzM5MTQwOTcyLCJqdGkiOiI1NTMyN2RhYzk0NDE0N2UxODkwYzg2M2U2OWJjODU1MyIsInVzZXJfaWQiOiJiYzVhNTI3Zi04YzdiLTQ5NTMtOGU3YS0wZjA1YjY5YzRmNGMifQ.RFpPYPc0sF3RDxvxvgswB5B3ZPyADoP9ZNzDtGce36I",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/auth/token/refresh/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"token",
+						"refresh",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contributor Add Skill",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM5MTkyMzM1LCJpYXQiOjE3MzkxODg3MzUsImp0aSI6ImNjZmU3M2QyNDM1ZjQ3ZmJhMDMwMTEyN2QxOWM3ZTA5IiwidXNlcl9pZCI6ImJjNWE1MjdmLThjN2ItNDk1My04ZTdhLTBmMDViNjljNGY0YyJ9.81OK6vHc4AOUj4ALVa69CFJSuZ9scRbBxe1mLZ5TZIg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "programming_language",
+							"value": "Lua",
+							"type": "text"
+						},
+						{
+							"key": "experience_level",
+							"value": "Beginner",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/contributor/skills/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"contributor",
+						"skills",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contributor Get Skills",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM5MTkzOTY2LCJpYXQiOjE3MzkxOTAzNjYsImp0aSI6ImZhMGZhZWZmMmZhZTRkNjdiMDRkZGU4MmRhZWI3MWU3IiwidXNlcl9pZCI6ImJjNWE1MjdmLThjN2ItNDk1My04ZTdhLTBmMDViNjljNGY0YyJ9.eANOK7Gc3crmGwW15vjHBP_MgtVLvMEcyDx57oXsdQc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/contributor/skills/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"contributor",
+						"skills",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contributor Delete Skill",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM5MTkwNzc1LCJpYXQiOjE3MzkxODcxNzUsImp0aSI6IjM0NmU4M2UwOTU1YzQ3YWFhYTM4NmI3MGY5YmYzNGNmIiwidXNlcl9pZCI6IjQ2NDJjM2Y0LWI5MjUtNDU4OC04MTU2LThhOTBiNWM1NTg0YSJ9.2ZnALb0TcZRvnjaL7YH-v2UrNM-Ltz6C8EFd65MzE9c",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "programming_language",
+							"value": "C++",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/contributor/skills/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"contributor",
+						"skills",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Token Verify",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM5MTMyOTUzLCJpYXQiOjE3MzkxMjkzNTMsImp0aSI6IjM3YzJlMGFmYWY0ZjQ0NWE4MjI5NWJhZmVkZWQ0YzYwIiwidXNlcl9pZCI6ImYzMmRiNDE0LThlODQtNGFhOS05OGE2LTRiMDc4ZDBhN2Y1YSJ9.lEq5mzbl9vSm7gwYrttDAZ5seqS699LqvpofrJ_Ush0",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/auth/token/verify/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"token",
+						"verify",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "refresh",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczOTI3Njc2NiwiaWF0IjoxNzM5MTkwMzY2LCJqdGkiOiJhODA1YjhmYTcwYjI0OTI1YTVmOGVhMGQ2MDZhZjE1ZCIsInVzZXJfaWQiOiJiYzVhNTI3Zi04YzdiLTQ5NTMtOGU3YS0wZjA1YjY5YzRmNGMifQ.affZsdz3SPoPT62nXccUQFxlBl-bwAxS-czeP3vlbyc",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/auth/logout/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"logout",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
